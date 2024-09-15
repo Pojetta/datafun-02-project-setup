@@ -5,12 +5,11 @@
 #####################################
 
 # Import moduldes from standand library
-# TODO: Import additional modules as needed
-import pathlib
+import pathlib 
+import time
 
 # Import local modules
-# TODO: Change this to import your module and uncomment
-# import case_utils 
+import joanna_utils
 
 #####################################
 # Declare global variables
@@ -26,9 +25,7 @@ data_path = project_path.joinpath('data')
 data_path.mkdir(exist_ok=True)
 
 #####################################
-# Define Function 1. For item in Range: Create a function to generate folders for a given range (e.g., years).
-# Pass in an int for the first year
-# Pass in an int for the last year
+# Define Function 1. Create folders for a range of years
 #####################################
 
 def create_folders_for_range(start_year: int, end_year: int) -> None:
@@ -39,50 +36,82 @@ def create_folders_for_range(start_year: int, end_year: int) -> None:
     start_year -- The starting year of the range (inclusive).
     end_year -- The ending year of the range (inclusive).
     '''
-    
-    # Log the function call and its arguments using an f-string
     print(f"FUNCTION CALLED: create_folders_for_range with start_year={start_year} and end_year={end_year}")
-
-    # TODO: Implement the actual folder creation logic
-    pass
-
-  
-#####################################
-# Define Function Function 2. For Item in List: Develop a function to create folders from a list of names.
-# Pass in a list of folder names 
-#####################################
-
-def create_folders_from_list(folder_list: list) -> None:
-    # TODO: Add docstring
-    # TODO: Log the function call and its arguments
-    # TODO: Implement this function and remove the temporary pass
-    pass
-
-
-  
-#####################################
-# Define Function 3. List Comprehension: Create a function to create prefixed folders by transforming a list of names and combining each with a prefix (e.g., "data-").
-# Pass in a list of folder names
-# Pass in a prefix (e.g. 'data-') to add to each
-#####################################
-
-def create_prefixed_folders(folder_list: list, prefix: str) -> None:
-    # TODO: Implement this function professionally and remove the temporary pass
-    pass
-
-  
+    
+    for year in range(start_year, end_year + 1):
+        folder_name = f"{year}"
+        folder_path = data_path.joinpath(folder_name)
+        folder_path.mkdir(parents=True, exist_ok=True)
+        print(f"Created folder: {folder_path}")
 
 #####################################
-# Define Function 4. While Loop: Write a function to create folders periodically (e.g., one folder every 5 seconds).
-# Pass in the wait time in seconds
+# Define Function 2. Create folders from a list of names
 #####################################
 
-def create_folders_periodically(duration_seconds: int) -> None:
-    # TODO: Implement this function professionally and remove the temporary pass
-    pass
+def create_folders_from_list(folder_names: list, to_lowercase: bool = False, remove_spaces: bool = False) -> None:
+    '''
+    Create folders for a given list with options to lowercase and remove spaces.
+    
+    Arguments:
+    folder_names -- A list of folder names.
+    to_lowercase -- Optionally convert names to lowercase.
+    remove_spaces -- Optionally remove spaces from folder names.
+    '''
+    print(f"FUNCTION CALLED: create_folders_from_list")
+    
+    for name in folder_names:
+        if to_lowercase:
+            name = name.lower()
+        if remove_spaces:
+            name = name.replace(' ', '-')
+        folder_path = data_path.joinpath(name)
+        folder_path.mkdir(parents=True, exist_ok=True)
+        print(f"Created folder: {folder_path}")
+        
+#####################################
+# Define Function 3. Create prefixed folders
+#####################################
 
+def create_prefixed_folders(folder_names: list, prefix: str) -> None:
+    '''
+    Create folders for a given list with a prefix.
+    
+    Arguments:
+    folder_names -- A list of folder names.
+    prefix -- The prefix to the folder names.
+    '''
+    print(f"FUNCTION CALLED: create_prefixed_folders")
+    
+    for name in folder_names:
+        folder_name = f"{prefix}{name}"
+        folder_path = data_path.joinpath(folder_name)
+        folder_path.mkdir(parents=True, exist_ok=True)
+        print(f"Created folder: {folder_path}")
 
-  
+#####################################
+# Define Function 4. Create folders periodically
+#####################################
+
+def create_folders_periodically(duration_secs: int, number_of_folders: int) -> None:
+    '''
+    Create folders periodically.
+    
+    Arguments:
+    duration_secs -- The number of seconds between folder creation.
+    number_of_folders -- The total number of folders to create.
+    '''
+    print(f"FUNCTION CALLED: create_folders_periodically every {duration_secs} seconds")
+
+    folder_count = 1
+    
+    while folder_count <= number_of_folders:
+        folder_name = f"folder-{folder_count}"
+        folder_path = data_path.joinpath(folder_name)
+        folder_path.mkdir(parents=True, exist_ok=True)
+        print(f"Created folder: {folder_path}")
+        folder_count += 1
+        time.sleep(duration_secs)
+
 #####################################
 # Define a main() function for this module.
 #####################################
@@ -96,12 +125,13 @@ def main() -> None:
     print("#####################################\n")
 
     # Print get_byline() from imported module
-    # TODO: Change this to use your module function and uncomment
-    # print(f"Byline: {case_utils.get_byline()}")
+    print(f"Byline: {joanna_utils.get_byline()}")
 
+   
     # Call function 1 to create folders for a range (e.g. years)
     create_folders_for_range(start_year=2020, end_year=2023)
 
+    
     # Call function 2 to create folders given a list
     folder_names = ['data-csv', 'data-excel', 'data-json']
     create_folders_from_list(folder_names)
@@ -113,11 +143,9 @@ def main() -> None:
 
     # Call function 4 to create folders periodically using while
     duration_secs:int = 5  # duration in seconds
-    create_folders_periodically(duration_secs)
+    create_folders_periodically(duration_secs, number_of_folders=3)
 
-    # TODO: Add options e.g., to force lowercase and remove spaces 
-    # to one or more of your functions (e.g. function 2) 
-    # Call your function and test these options
+    # Call your function 2 and test these options
     regions = [
       "North America", 
       "South America", 
@@ -127,8 +155,7 @@ def main() -> None:
       "Oceania", 
       "Middle East"
     ]
-    # Uncomment this line after you've added your custom logic
-    # create_folders_from_list(regions, to_lowercase=True, remove_spaces=True)
+    create_folders_from_list(regions, to_lowercase=True, remove_spaces=True)
 
     # End of main execution
     print("\n#####################################")
@@ -143,4 +170,4 @@ def main() -> None:
 if __name__ == '__main__':
     main()
 
-#TODO: Run this as a script to test that all functions work as intended.
+
